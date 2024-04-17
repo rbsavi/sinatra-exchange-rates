@@ -6,7 +6,6 @@ get("/") do
 
   # build the API url, including the API key in the query string
   api_url = "https://api.exchangerate.host/list?access_key=#{ENV["EXCHANGE_RATE_KEY"]}"
-  print(api_url)
 
   # use HTTP.get to retrieve the API information
   raw_data = HTTP.get(api_url)
@@ -18,7 +17,7 @@ get("/") do
   parsed_data = JSON.parse(raw_data_string)
 
   # get the symbols from the JSON
-  @symbols = parsed_data["currencies"].keys
+  @from_symbols = parsed_data["currencies"].keys
 
   # render a view template where I show the symbols
   erb(:homepage)
@@ -29,10 +28,12 @@ get("/:from_currency") do
   @original_currency = params.fetch("from_currency")
 
   api_url = "https://api.exchangerate.host/list?access_key=#{ENV["EXCHANGE_RATE_KEY"]}"
-
+  raw_data = HTTP.get(api_url)
+  raw_data_string = raw_data.to_s
+  parsed_data = JSON.parse(raw_data_string)
+  @to_symbols = parsed_data["currencies"].keys
 
   erb(:convert_first_page)
-  # some more code to parse the URL and render a view template
 end
 
 get("/:from_currency/:to_currency") do
@@ -44,7 +45,8 @@ get("/:from_currency/:to_currency") do
   raw_data = HTTP.get(api_url)
   raw_data_string = raw_data.to_s
   parsed_data = JSON.parse(raw_data_string)
-  fx = parsed_data["result"]
+  @fx_result = parsed_data["result"]
+
+  erb(:convert_second_page)
   
-  # some more code to parse the URL and render a view template
 end

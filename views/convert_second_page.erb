@@ -1,0 +1,23 @@
+<html>
+
+<head>
+  <h1> Convert <%= @original_currency %> to <%= @destination_currency %> </h1>
+<head>
+
+<body>
+
+<div>
+<a 
+  href="/<%= @original_currency %>"> 
+  Go back
+  </a>
+</div>
+
+|
+<div>
+  1 <%= @original_currency %> equals  <%= @fx_result %> <%= @destination_currency %> 
+</div>
+
+</body>
+
+</html>
